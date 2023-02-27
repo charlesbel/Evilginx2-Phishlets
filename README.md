@@ -9,5 +9,5 @@ Many Evilginx2 Phishlets Uptodate
 - Instagram (✅)
 - Facebook (✅)
 - Dropbox (✅)
+- Netflix (✅)
 - Stackoverflow (✅)
-- Netflix (➖) : May not capture cookies
