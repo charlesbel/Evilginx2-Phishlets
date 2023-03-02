@@ -6,7 +6,7 @@ Many Evilginx2 Phishlets Uptodate
 | ✅ Working  | ➖ Partially Working | ❌ Not Working anymore |
 | ------------- | ------------- | ------------- |
 
-- PayPal (✅) : Available for purchase, contact me on telegram @charlesbel
+- PayPal (✅) : Available for purchase, contact me on telegram <a href="https://t.me/charlesbel" target="_blank">@charlesbel</a>
 - Instagram (✅)
 - Facebook (✅)
 - Dropbox (✅)
