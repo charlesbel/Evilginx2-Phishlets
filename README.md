@@ -1,18 +1,27 @@
-# Evilginx2-Phishlets
-Many Evilginx2 Phishlets Uptodate
+Evilginx2 Phishlets 🎣
 
-# Available Phishlets and status
+Stay ahead in the phishing game with our collection of Evilginx2 Phishlets!
+Phishlets Status Overview
+✅ Working	➖ Partially Working	❌ Not Working Anymore
+Available for Purchase (Contact @tomkabel on Telegram):
 
-| ✅ Working  | ➖ Partially Working | ❌ Not Working anymore |
-| ------------- | ------------- | ------------- |
+    PayPal (✅)
+    Google (✅)
+    NS&I (➖)
+    Facebook (✅/➖)
+        Login/Cookies captured, Web/Mobile. ➖ Unfinished due to incomplete FB Ad account data dumping.
+    Office 365 (✅)
+    NatWest (➖)
+    QQ Mail (✅/➖)
+        ➖ Unreliable if there is >1 QR code images on the page, works fine with just 1.
+    Yahoo (✅)
+    Aliyun (➖)
+        ➖ Unfinished.
+    Dropbox (✅)
+    Binance (✅)
 
-<h3>Available for purchase, contact me on telegram <a href="https://t.me/charlesbel" target="_blank">@charlesbel</a> :</h3>
-<p>- PayPal (✅)</p>
-<p>- Google (✅)</p>
-<h3>Available here for free :</h3>
-<p>- Instagram (✅)</p>
-<p>- Facebook (✅)</p>
-<p>- Dropbox (✅)</p>
-<p>- Netflix (✅)</p>
-<p>- Stackoverflow (✅)</p>
-<p>- I-Cloud (➖) : Never been so far in the login, but now unable to successfully ask for 2FA code with the GET request on https://idmsa.apple.com/appleauth/auth</p>
+Upcoming Releases (Soon-to-be Free):
+
+    Dropbox
+
+Feel free to reach out if you have any questions or need assistance. Let's make phishing easier! 🌐
