@@ -6,7 +6,6 @@
 <p align="center">
   <!-- Add badges for more credibility -->
   <a href="https://github.com/m41k1n4177/Evilginx2-Phishlets"><img alt="GitHub stars" src="https://img.shields.io/github/stars/m41k1n4177/Evilginx2-Phishlets?style=social"></a>
-  <!-- Other badges can be added here such as GitHub forks, issues, pull requests, etc. -->
 </p>
 
 ---
@@ -57,7 +56,8 @@ If you'd like to contribute to the project or suggest improvements, please submi
 ---
 
 ### 📝 License
-This project is released under the ![MIT](https://img.shields.io/github/license/m41k1n4177/Evilginx2-Phishlets) Check the LICENSE file for more details.
+This project is released under the ![MIT](https://img.shields.io/github/license/m41k1n4177/Evilginx2-Phishlets.svg?style=)
+Check the LICENSE file for more details.
 
 ---
 
